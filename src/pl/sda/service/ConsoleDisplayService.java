@@ -167,7 +167,7 @@ public class ConsoleDisplayService {
     }
 
     private String createFolderPath() {
-        String folderPath = "C:\\Users\\PCz\\IdeaProjects\\invoiceCreator\\src\\pl\\sda\\";
+        String folderPath = ".\\src\\pl\\sda\\";
         String folderName = folderPath + "invoices";
         return folderName;
     }
