@@ -3,14 +3,16 @@ package pl.sda;
 import pl.sda.model.*;
 import pl.sda.service.*;
 
+import java.io.IOException;
 import java.util.Date;
 import java.util.Scanner;
 
 public class Main {
-    public static void main(String[] args) {
+    public static void main(String[] args) throws IOException {
 
         ConsoleInputDataService consoleInputDataService = new ConsoleInputDataService();
         ConsoleDisplayService consoleDisplayService = new ConsoleDisplayService();
+// 1 faktura
         Invoice invoice = consoleInputDataService.invoiceStub();
 //      tworzymy pustą fakturę
         char[][] invoiceTemplate = consoleDisplayService.createInvoiceTemplate(33, 100);
@@ -19,9 +21,9 @@ public class Main {
         char[][] dataFrame = consoleDisplayService.createEmptySectionWithFrame(3, 35);
         char[][] sellerFrame = consoleDisplayService.createEmptySectionWithFrame(6, 40);
         char[][] buyerFrame = consoleDisplayService.createEmptySectionWithFrame(6, 40);
-        char[][] titleSection = consoleDisplayService.createInvoiceTemplate(2,30);
-        char[][] itemSection = consoleDisplayService.createItemSection(invoice.getItemList(),80);
-        char[][] totalValueSection = consoleDisplayService.createInvoiceTemplate(2,30);
+        char[][] titleSection = consoleDisplayService.createInvoiceTemplate(2, 30);
+        char[][] itemSection = consoleDisplayService.createItemSection(invoice.getItemList(), 80);
+        char[][] totalValueSection = consoleDisplayService.createInvoiceTemplate(2, 30);
         consoleDisplayService.fillDataSectionWithData(dataFrame, invoice.getIssueDate());
         consoleDisplayService.fillSellerSectionWithData(sellerFrame, invoice.getSeller());
         consoleDisplayService.fillBuyerSectionWithData(buyerFrame, invoice.getBuyer());
@@ -36,6 +38,41 @@ public class Main {
         consoleDisplayService.insertSectionIntoInvoice(invoiceTemplate, itemSection, 0, 17);
         consoleDisplayService.insertSectionIntoInvoice(invoiceTemplate, totalValueSection, 0, 28);
         consoleDisplayService.display2DArray(invoiceTemplate);
+
+// 2 faktura
+        Invoice invoice2 = consoleInputDataService.invoiceStub2();
+//      tworzymy pustą fakturę
+        char[][] invoiceTemplate2 = consoleDisplayService.createInvoiceTemplate(33, 100);
+
+//      tworzymy puste sekcje
+        char[][] dataFrame2 = consoleDisplayService.createEmptySectionWithFrame(3, 35);
+        char[][] sellerFrame2 = consoleDisplayService.createEmptySectionWithFrame(6, 40);
+        char[][] buyerFrame2 = consoleDisplayService.createEmptySectionWithFrame(6, 40);
+        char[][] titleSection2 = consoleDisplayService.createInvoiceTemplate(2, 30);
+        char[][] itemSection2 = consoleDisplayService.createItemSection(invoice2.getItemList(), 80);
+        char[][] totalValueSection2 = consoleDisplayService.createInvoiceTemplate(2, 30);
+        consoleDisplayService.fillDataSectionWithData(dataFrame2, invoice2.getIssueDate());
+        consoleDisplayService.fillSellerSectionWithData(sellerFrame2, invoice2.getSeller());
+        consoleDisplayService.fillBuyerSectionWithData(buyerFrame2, invoice2.getBuyer());
+        consoleDisplayService.fillTitleSectionWithData(titleSection2, invoice2.getTitle());
+        consoleDisplayService.fillTotalValiuSectionWithData(totalValueSection2, invoice2.getTotalValue());
+
+//        wklejamy sekcje
+        consoleDisplayService.insertSectionIntoInvoice(invoiceTemplate2, dataFrame2, 0, 0);
+        consoleDisplayService.insertSectionIntoInvoice(invoiceTemplate2, sellerFrame2, 0, 10);
+        consoleDisplayService.insertSectionIntoInvoice(invoiceTemplate2, buyerFrame2, 50, 10);
+        consoleDisplayService.insertSectionIntoInvoice(invoiceTemplate2, titleSection2, 30, 7);
+        consoleDisplayService.insertSectionIntoInvoice(invoiceTemplate2, itemSection2, 0, 17);
+        consoleDisplayService.insertSectionIntoInvoice(invoiceTemplate2, totalValueSection2, 0, 28);
+        consoleDisplayService.display2DArray(invoiceTemplate2);
+
+        // tworzymy katalog
+        consoleDisplayService.createFolder();
+
+//      Zapis do pliku obu faktur.
+        consoleDisplayService.createInvoiceFile(invoice.getTitle(), invoiceTemplate);
+        consoleDisplayService.createInvoiceFile(invoice2.getTitle(), invoiceTemplate2);
+
 
 
 

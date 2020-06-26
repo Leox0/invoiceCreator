@@ -1,17 +1,24 @@
 package pl.sda.service;
 
 import pl.sda.model.Entity;
-import pl.sda.model.Invoice;
 import pl.sda.model.Item;
 
 
+import java.io.File;
+import java.io.IOException;
+import java.io.PrintStream;
+import java.nio.file.Files;
+import java.nio.file.Path;
+import java.nio.file.Paths;
 import java.text.SimpleDateFormat;
-import java.util.Date;
-import java.sql.Array;
+import java.util.ArrayList;
 import java.util.Arrays;
-import java.util.SimpleTimeZone;
+import java.util.Date;
+import java.util.List;
 
 public class ConsoleDisplayService {
+
+    private final String TITLE = "Faktura VAT nr ";
 
 
     public void insertSectionIntoInvoice(char[][] invoiceTemplate, char[][] section, int x, int y) {
@@ -125,7 +132,7 @@ public class ConsoleDisplayService {
     public void fillTitleSectionWithData(char[][] section, String title) {
 
         String[] titleData = new String[]{
-                "Faktura VAT nr " + title
+                TITLE + title
         };
         fillEmptySectionWithProvidedData(titleData, section);
     }
@@ -136,13 +143,36 @@ public class ConsoleDisplayService {
         };
         fillEmptySectionWithProvidedData(dataData, section);
     }
+
     public void fillTotalValiuSectionWithData(char[][] section, Double totalValue) {
-        System.out.println(totalValue);
         String[] data = new String[]{
                 String.format("DO ZAPŁATY: %, .2f", totalValue) + " zł"
         };
         fillEmptySectionWithProvidedData(data, section);
     }
+
+    public void createInvoiceFile(String fileName, char[][] twoDimArray) throws IOException {
+        String filePath = createFolderPath() + "/" + TITLE + fileName.replaceAll("/","_") + ".txt";
+        Path path = Paths.get(filePath);
+        PrintStream output = new PrintStream(new File(filePath));
+
+        for (char[] array : twoDimArray) {
+            output.println(array);
+        }
+    }
+
+    public void createFolder() {
+        File folder = new File(createFolderPath());
+        folder.mkdir();
+    }
+
+    private String createFolderPath() {
+        String folderPath = "C:\\Users\\PCz\\IdeaProjects\\invoiceCreator\\src\\pl\\sda\\";
+        String folderName = folderPath + "invoices";
+        return folderName;
+    }
+
+
     private void fillEntitySectionWithData(char[][] section, Entity entity, boolean isSeller) {
         String postalCode = entity.getAddress().getPostalCode().getValue();
         String city = entity.getAddress().getCity();
